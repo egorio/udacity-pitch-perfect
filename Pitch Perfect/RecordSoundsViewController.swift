@@ -21,10 +21,8 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        stopButton.hidden = true
-        pauseButton.hidden = true
-        recordButton.enabled = true
-        recordingInProgress.text = "Tap to record your voice"
+        
+        resetRecorderScreenState()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -36,11 +34,23 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         }
     }
     
+    func resetRecorderScreenState() {
+        stopButton.hidden = true
+        pauseButton.hidden = true
+        recordButton.enabled = true
+        recordingInProgress.text = "Tap to record your voice"
+    }
+    
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {
             recordedAudio = RecordedAudio(recorder: recorder)
             
-            self.performSegueWithIdentifier("stopRecording", sender: recordedAudio)
+            performSegueWithIdentifier("stopRecording", sender: recordedAudio)
+        }
+        else {
+            resetRecorderScreenState()
+            
+            recordingInProgress.text = "Something wrong, try to Record again"
         }
     }
     
@@ -55,7 +65,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         
         if session.category != AVAudioSessionCategoryPlayAndRecord {
             try! session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+            let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) [0] as String
             let recordingName = "record.wav"
             let filePath = NSURL.fileURLWithPathComponents([dirPath, recordingName])
             
