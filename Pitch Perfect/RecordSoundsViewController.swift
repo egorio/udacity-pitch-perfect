@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
-
+    
     var audioRecorder : AVAudioRecorder!
     var recordedAudio : RecordedAudio!
     
@@ -28,8 +28,8 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if(segue.identifier == "stopRecording") {
-            let playSoundsVC:PlaySoundsViewController = segue.destinationViewController as! PlaySoundsViewController
+        if segue.identifier == "stopRecording" {
+            let playSoundsVC: PlaySoundsViewController = segue.destinationViewController as! PlaySoundsViewController
             let data = sender as! RecordedAudio
             
             playSoundsVC.receivedAudio = data
@@ -37,7 +37,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     }
     
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
-        if(flag) {
+        if flag {
             recordedAudio = RecordedAudio(recorder: recorder)
             
             self.performSegueWithIdentifier("stopRecording", sender: recordedAudio)
@@ -52,7 +52,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         stopButton.hidden = false
         
         let session = AVAudioSession.sharedInstance()
-
+        
         if session.category != AVAudioSessionCategoryPlayAndRecord {
             try! session.setCategory(AVAudioSessionCategoryPlayAndRecord)
             let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
@@ -63,7 +63,6 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
             audioRecorder.delegate = self
             audioRecorder.meteringEnabled = true
             audioRecorder.prepareToRecord()
-            
         }
         
         audioRecorder.record()
@@ -86,4 +85,3 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         try! audioSession.setActive(false)
     }
 }
-
