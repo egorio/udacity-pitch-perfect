@@ -65,6 +65,8 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         
         if session.category != AVAudioSessionCategoryPlayAndRecord {
             try! session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try! session.setActive(true)
+            
             let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) [0] as String
             let recordingName = "record.wav"
             let filePath = NSURL.fileURLWithPathComponents([dirPath, recordingName])

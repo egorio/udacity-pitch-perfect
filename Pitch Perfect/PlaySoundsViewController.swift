@@ -30,10 +30,17 @@ class PlaySoundsViewController: UIViewController {
         audioEngine.stop()
         audioPlayer.stop()
         audioEngine.reset()
+        
+        let audioSession = AVAudioSession.sharedInstance()
+        try! audioSession.setActive(false)
     }
     
     func playWithRate(rate: Float) {
         stopPlaying()
+        
+        let session = AVAudioSession.sharedInstance()
+        try! session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
+        
         audioPlayer.rate = rate
         audioPlayer.currentTime = 0.0
         audioPlayer.play()
@@ -41,6 +48,9 @@ class PlaySoundsViewController: UIViewController {
     
     func playWithEffect(effect: AVAudioUnit) {
         stopPlaying()
+        
+        let session = AVAudioSession.sharedInstance()
+        try! session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
         
         let audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attachNode(audioPlayerNode)
